@@ -1,0 +1,12 @@
+
+  Option 1.
+  "Extend a regular PL with shell capabilities"
+
+  + Scheme Shell (scsh.net)
+  + Xonsh
+
+    - quotes not required for external calls!
+    - but... superset of python
+
+  => Existing PLs will always have semantic mismatch!
+

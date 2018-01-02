@@ -1,0 +1,18 @@
+
+  + pipes
+
+    command > %channel
+    command < %channel
+    command1 | command2
+
+    cat %channel > %channel
+    cat %channel | command
+
+    { < %channel } %proc
+    { < %channel } lines | each (line => ...)
+
+    %proc |(1>2 3>$thing &>5) %proc
+    %proc |(2>error.log)
+    %proc > error.log
+
+

@@ -1,0 +1,189 @@
+Qush: A Comfortable Shell
+
+       /
+       |  . What Do Shell Programmers Need?
+       |
+       |  . Prior Art
+       |
+       |  . Idea: Re-Use OS Concepts
+       |
+       |  . Shell Concurrency Model
+       |
+       |  . Syntax Sketch
+       |
+       |  . Parsing with Skeletons
+       \
+
+
+What do Shell Programmers Need?
+  - fluent interface with external programs
+    - without quoting
+    - without marshalling
+    - direct pipes, i/o interface, concurrency
+    - environment variables
+  - interactive tools
+    - tab-completion
+    - linear composition
+    - dynamic features: local patching, overriding
+  - basic abstraction tools
+    - functions
+    - namespaces
+    - data structures
+    - error handling
+
+Prior Art
+  - scheme shell
+    - uses lisp syntax (non-linear composition)
+    - quotes required for external calls
+    - marshalling necessary between scheme values and shell values
+  - xonsh
+    - quotes not required for external calls!
+    - but... superset of python = marshalling overhead
+  - rc shell (Duff, Bell Labs), es shell (Haahr/Rakitzis), fish shell
+    - closer to shell semantics, basic "cleanup"
+    - es adds "closures" by serializing them as strings - special
+      syntax required to call closures.
+      (es is abandoned)
+    - does not address the underlying "everything is a string" problem
+
+Idea: Re-Use OS Concepts
+  - First note: MANY OPEN DESIGN QUESTIONS
+  - How to get around marshalling overhead?
+    - expose functionality people are using anyways!
+      - argv lists => make them actual lists (actually vecs): nesting,
+                      splats, etc. can use bare strings to make variants.
+      - environments => semantics are already the same as prototype objects.
+                        map of string => value, with a default pointer. add in
+                        fd pointers, mixin lists. closure? TBD
+      - files, pipes => channels. abstract readable / writeable pipes for when
+                        more serious concurrent programming is required.
+      - processes / pids => proc. can be a function or an external process.
+      - executables / functions => make first class, functions have closures.
+                                   functions should be able to be passed into
+                                   external programs and called through standard
+                                   exec interface.
+
+            watch -d 3 $my-function
+
+      - numbers, because sometimes you really just have to do math
+      - return codes => errors? exceptions? compensation? TBD
+      - signals/traps => exceptions? more workflow-esque compensations?
+
+    Q: how do these behave when passed to external programs, which can only accept
+       strings?
+
+      - argv lists: joined with TAB
+      - channels: sneak in a file descriptor, and send a decimal number
+      - proc: send a PID
+      - environments: customizable with special #repr method
+
+    Q: how do you *use* values? (substitution, interpolation)
+        - (f x y) -> multiple return values, splice each write into the containing vector or expression
+        - $(f x y) -> collect a single string and substitute its value
+        - both block until f halts.
+
+Shell Concurrency Model
+  - similar to erlang, but with an outbox
+  - actually, N inboxes and N outboxes
+  - proc is killed if it is blocked on a channel that is closed
+  - *lots* of design questions
+  - EXAMPLES
+
+      big-queue = & make-queue 1G -backpressure=exponential
+
+      producer | $big-queue
+      $big-queue | each ( => ... )
+
+      producer | each ( x =>
+        # closes stdin if the condition passes
+        @if (test-condition) (break)
+      )
+
+      # processes in parallel
+      producer | each ( => ... )
+
+      # collects all values first
+      for [(producer)] ( => ... )
+
+      # explicitly call a function (disallow $PATH lookup)
+      %foo $x $y
+
+      # explicitly call external program (only $PATH or filepath lookup)
+      : foo $x $y
+
+      # silently run a command (disconnect and mute all output channels)
+      - foo $x $y
+
+      # spawn a command in a new process (resulting in the proc if var captured)
+      & foo x y
+
+
+
+
+Parsing With Skeletons
+
+
+* Problem Statement
+  - often implementing languages on new platforms
+  - error messages could be better with less work
+  - why are macros harder when it's not lisp
+
+* D-Exprs
+  - Bachrach, Playford. "D-Expressions: Lisp Power, Dylan Style"
+
+----
+
+            (+ valid syntax)
+   Input -> AST
+         \
+          -> Parse Error
+
+   @module foo [ # comment
+     x = 1
+     y = 2
+   ]
+
+   (MODULE "foo" (ASSIGN x (LIT 1))
+                 (ASSIGN y (LIT 2)))
+
+
+
+
+----
+
+
+            (+ valid tokens)
+   Input -> Tokens -> AST
+         \
+          -> Lex Error
+
+   <@module> <foo> <[> # comment
+     <x> <=> <1> <"\n">
+     <y> <=> <2> <"\n">
+   <]>
+
+   (KEYWORD "module") (NAME "foo") (LBRACK)
+   (NAME "x") (EQ) (INT "1") (NL) ...
+
+
+
+----
+
+                      (+ well-nested)
+   Input -> Tokens -> Skeleton -> AST
+                   \
+                    -> Nesting Error
+
+
+   (<@module> <foo> ([
+     (<x> <=> <1>)
+     (<y> <=> <2>)
+   ]))
+
+   (ITEM (TOK @module)
+         (TOK foo)
+         (NEST <[>
+               (ITEM (TOK x) (TOK =) (TOK 1))
+               (ITEM (TOK y) (TOK =) (TOK 2))
+               <]>)
+

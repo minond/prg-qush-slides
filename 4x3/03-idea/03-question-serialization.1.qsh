@@ -1,0 +1,18 @@
+
+  (>o.o)._/ real ARGV can only be strings!
+       what happens when you use something else?
+
+  - this is why es serializes lambdas
+
+  - some have obvious answers, some don't
+
+  - override an internal env method to customize
+
+  - there is still *some* marshalling overhead,
+    but only when actually translating different
+    concepts
+
+  - actual goal:
+    no marshalling overhead to use lists as argv,
+    envs as environments, channels like files, etc.
+

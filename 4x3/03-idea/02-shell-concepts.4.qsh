@@ -1,0 +1,18 @@
+
+  + Idea: Re-Use OS Concepts
+
+    - argv lists
+    - environments
+    - files, pipes
+    - funcs, executables
+    > processes, PIDs
+
+     - proc objects, representing a running
+       function or external program
+
+     - can send messages ad-hoc or pipe
+
+     - real concurrent programming
+
+
+

@@ -1,0 +1,18 @@
+
+  Option 1.
+  "Extend a regular PL with shell capabilities"
+
+  + Scheme Shell (scsh.net)
+
+    - uses lisp syntax:
+      (| (gzip) (mcrypt) (ssh ,rhost ,command))
+
+    - quotes required: (exec "ls" "-l")
+
+    - scheme semantics =/= shell semantics
+
+
+
+
+
+

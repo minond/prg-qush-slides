@@ -1,0 +1,18 @@
+
+  + Idea: Re-Use OS Concepts
+
+    - argv lists
+    - environments
+    - files, pipes
+    > funcs, executables
+
+     - make first class, with closure
+
+     - allow passing lambdas to external programs
+       to be called back with standard `exec`
+       interface
+
+       watch -d 3 $my-function
+
+
+

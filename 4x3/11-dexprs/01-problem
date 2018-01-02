@@ -1,0 +1,18 @@
+
+                          THE PROBLEMS
+
+* implementing languages on new platforms
+  that do not have mature tools for parsing
+
+* Parse error messages could be improved
+
+* Why are macros harder when it's not lisp?
+  - exposes the entire ast spec to the runtime
+
+* idea: a generic toolset for parsing, with
+  a generic pattern-matching system for skeleton
+  tree transformations *using* skeleton trees
+
+  Skel -> (Skel -> Skel)
+
+

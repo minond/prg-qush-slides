@@ -1,0 +1,18 @@
+
+  (,-~-)._/ shell functions can't return values!
+            neither can external programs!
+  does a lambda return? can you substitute values?
+
+  - shell functions have stdout
+
+  - idea: lua-style *multiple return values*
+    from stdout
+
+    (f x y) : splice stdout into the expression
+
+
+
+
+
+
+

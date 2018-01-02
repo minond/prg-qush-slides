@@ -1,0 +1,18 @@
+
+  + Idea: Re-Use OS Concepts
+
+    - argv lists
+    > environments
+
+     - a map from string => value with a parent
+       **same as prototypes!**
+
+     - x = { y = 2; z = 3 }; echo $x!y
+
+     - add: fd pointers
+
+     - add: mixin lists, rb-style inheritance
+
+
+
+

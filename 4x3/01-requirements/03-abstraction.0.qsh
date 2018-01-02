@@ -1,0 +1,18 @@
+
+  + Basic Abstraction Tools
+    > lambdas
+
+
+
+    hello() {
+      echo $1
+    }
+
+
+
+  (,o.o)._/ "it'd be nice if these had closures"
+
+
+
+
+

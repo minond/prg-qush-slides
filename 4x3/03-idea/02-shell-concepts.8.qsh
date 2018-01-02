@@ -1,0 +1,18 @@
+
+  + Idea: Re-Use OS Concepts
+
+    - argv lists
+    - environments
+    - files, pipes
+    - funcs, executables
+    - processes, PIDs
+    - numbers
+    - exit codes
+    - signals/traps
+
+
+
+    # (>~.~)._/ that'd make a pretty usable PL,
+    #           but there are some Big Questions
+
+

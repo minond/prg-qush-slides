@@ -1,0 +1,18 @@
+
+  Option 2.
+  "A new shell that fixes cosmetic problems"
+
+  + fish, zsh
+    - aim for sh-compatibility
+    - also inherit many of the Bad Parts
+
+  + rc shell, es shell
+    - better quoting syntax, less "gotchas"
+    - es adds closures by serializing as strings
+
+      ; x = @ y{ z = @ { echo $y } }
+      ; $x 3
+      ; echo $z
+      %closure(y=3)@ { echo $y }
+
+       must parse at call time (!)

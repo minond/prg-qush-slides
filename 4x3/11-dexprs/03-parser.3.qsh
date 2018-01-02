@@ -1,0 +1,18 @@
+
+                                (+ valid syntax)
+   Input -> Tokens -> Skeleton -> AST
+                               \
+                                -> SyntaxError
+
+   (<foo> <=> (<{> # comment
+     (<x> <=>)
+     (<y> <=> <2>)
+   <}>))
+
+   [ITEM [TOK foo]
+         [TOK =]        # error in assignment of x
+         [NEST <{>      #        vvvv
+               [ITEM [TOK x] [TOK =]]
+               [ITEM [TOK y] [TOK =] [TOK 2]]
+               <}>]
+

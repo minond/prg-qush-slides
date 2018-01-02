@@ -1,0 +1,18 @@
+
+  + Idea: Re-Use OS Concepts
+
+    > argv lists
+
+     - make them actual lists (actually vectors)
+
+     - nesting: [x y z [w]]
+
+     - splats: [x y ...$z]
+
+     - variants: [left "error"] / [right 3]
+
+
+
+
+
+

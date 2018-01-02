@@ -1,0 +1,18 @@
+
+            (+ valid syntax)
+   Input -> AST
+         \
+          -> ParseError
+
+   foo = { # comment
+     x = 1
+     y = 2
+   }
+
+   [ASSIGN "foo"
+    [ENV [[ASSIGN x [LIT 1]]
+          [ASSIGN y [LIT 2]]]]
+
+
+
+
